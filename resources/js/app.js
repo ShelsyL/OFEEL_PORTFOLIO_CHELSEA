@@ -43,7 +43,6 @@ const app = new Vue({
     router,
     store, // Je lui dis que j'utilise le store dans mon instance de vue
     created () {
-      this.$store.dispatch('setWork');
       this.$store.dispatch('setWorks');
       this.$store.dispatch('setCategories');
     }

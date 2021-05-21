@@ -49,45 +49,16 @@
 
 <script>
 export default {
-
   data () {
-    return {
-      work : null,
-      loading: false,
-      error: null
-    }
+    return {};
   },
 
-  created(){
-    console.log('created');
-    this.fetchData_work() // recuperer les données data
-  },
-
-  watch: {
-    // appeler encore la méthode si la route change
-    '$route': 'fetchData_work'
-  },
-
-  methods: {
-    fetchData_work: function() {
-      console.log('getWorkById');
-      this.error = this.work = null
-      this.loading = true
-      let id = this.$route.params.id
-
-      axios.get('api/works/' + id)
-      .then( response => {
-        console.log(response)
-        this.work = response.data
-      })
-
-      .catch(error => {
-        console.log(error)
-        this.errored = error.toString()
-      })
-
-      .finally(() => this.loading = false)
+  computed: {
+    work () {
+      let id = this.$route.params.id;
+      return this.$store.getters.getWorkById(id);
     }
   }
+
 }
 </script>

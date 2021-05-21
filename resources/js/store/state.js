@@ -2,7 +2,6 @@
 
 let state = {
     works: [],
-    work: [],
     categories: []
 }
 

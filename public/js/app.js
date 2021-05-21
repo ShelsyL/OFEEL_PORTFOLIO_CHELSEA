@@ -2033,7 +2033,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({});
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {};
+  },
+  computed: {
+    work: function work() {
+      var id = this.$route.params.id;
+      return this.$store.getters.getWorkById(id);
+    }
+  }
+});
 
 /***/ }),
 
@@ -2247,78 +2257,26 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
-    return {// works: null,
-      // loading: false,
-      // error: null
-    };
-  },
-  watch: {// appeler encore la méthode si la route change
-    // '$route': 'fetchData'
+    return {};
   },
   computed: {
     works: function works() {
-      var idCat = this.$route.params.id;
-
-      if (typeof idCat === 'undefined') {
-        console.log('is');
-        return this.$store.getters.getWorks;
-      } else {
-        console.log('isnt');
-        return this.$store.getters.getWorksByCategorieId(idCat);
-      } // return this.$store.getters.getWorks;
-
+      // let idCat = this.$route.params.id;
+      // if (typeof idCat === 'undefined'){
+      //   console.log('is')
+      //   return this.$store.getters.getWorks;
+      // }
+      // else {
+      //   console.log('isnt')
+      //   return this.$store.getters.getWorksByCategorieId(idCat);
+      // }
+      return this.$store.getters.getWorks;
     }
-  } // methods: {
-  //   fetchData: function() {
-  //     // console.log('fetchData')
-  //
-  //     let idCat = this.$route.params.id
-  //     console.log(typeof(idCat))
-  //     console.log(idCat)
-  //
-  //     if(typeof idCat === 'undefined'){
-  //       console.log('is')
-  //       return this.$store.getters.getWorks()
-  //     }else{
-  //       console.log('isnt')
-  //       this.getWorksByCategorie()
-  //     }
-  //   },
-  // getAllWorks: function() {
-  //   console.log('getAllWorks');
-  //   this.error = this.works = null
-  //   this.loading = true
-  //   axios.get('api/works/')
-  //        .then( response => {
-  //           console.log(response)
-  //           this.works = response.data
-  //   })
-  //   .catch(error => {
-  //     console.log(error)
-  //     this.errored = error.toString()
-  //   })
-  //   .finally(() => this.loading = false)
-  // },
-  // getWorksByCategorie: function() {
-  //   console.log('getWorksByCategorie');
-  //   this.error = this.works = null
-  //   this.loading = true
-  //   let idCat = this.$route.params.id
-  //   axios.get('api/works/categorie/' + idCat)
-  //        .then( response => {
-  //           console.log(response)
-  //           this.works = response.data
-  //   })
-  //   .catch(error => {
-  //     console.log(error)
-  //     this.errored = error.toString()
-  //   })
-  //   .finally(() => this.loading = false)
-  // }
-  // }
-
+  }
 });
 
 /***/ }),
@@ -2385,37 +2343,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
-    return {
-      work: null,
-      loading: false,
-      error: null
-    };
+    return {};
   },
-  created: function created() {
-    console.log('created');
-    this.fetchData_work(); // recuperer les données data
-  },
-  watch: {
-    // appeler encore la méthode si la route change
-    '$route': 'fetchData_work'
-  },
-  methods: {
-    fetchData_work: function fetchData_work() {
-      var _this = this;
-
-      console.log('getWorkById');
-      this.error = this.work = null;
-      this.loading = true;
+  computed: {
+    work: function work() {
       var id = this.$route.params.id;
-      axios.get('api/works/' + id).then(function (response) {
-        console.log(response);
-        _this.work = response.data;
-      })["catch"](function (error) {
-        console.log(error);
-        _this.errored = error.toString();
-      })["finally"](function () {
-        return _this.loading = false;
-      });
+      return this.$store.getters.getWorkById(id);
     }
   }
 });
@@ -2475,7 +2408,6 @@ var app = new Vue({
   store: _store_index_js__WEBPACK_IMPORTED_MODULE_1__.default,
   // Je lui dis que j'utilise le store dans mon instance de vue
   created: function created() {
-    this.$store.dispatch('setWork');
     this.$store.dispatch('setWorks');
     this.$store.dispatch('setCategories');
   }
@@ -2581,38 +2513,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 // ./resources/js/store/actions.js
 var actions = {
-  /**
-   * WORKS
-   * @param {[type]} commit [description]
-   */
   setWorks: function setWorks(_ref) {
     var commit = _ref.commit;
     // TRANSACTION AJAX pour lancer le SETTER
     axios.get('api/works').then(function (reponsePHP) {
       return commit('SET_WORKS', reponsePHP.data);
-    }); // axios.get('api/works/categorie/' + idCat)
-    //      .then(reponsePHP => (commit ('SET_WORKS', reponsePHP.data)));
+    }), axios.get('api/categories').then(function (reponsePHP) {
+      return commit('SET_CATEGORIES', reponsePHP.data);
+    });
   },
-
-  /**
-   * CATEGORIES
-   * @param {[type]} commit [description]
-   */
   setCategories: function setCategories(_ref2) {
     var commit = _ref2.commit;
     axios.get('api/categories').then(function (reponsePHP) {
       return commit('SET_CATEGORIES', reponsePHP.data);
-    });
-  },
-
-  /**
-   * WORKS BY CATEGORIE
-   * @param {[type]} commit [description]
-   */
-  setWorksByCategorie: function setWorksByCategorie(_ref3, id) {
-    var commit = _ref3.commit;
-    axios.get('api/works/categorie/' + idCat).then(function (reponsePHP) {
-      return commit('SET_WORK', reponsePHP.data);
     });
   }
 };
@@ -2647,12 +2560,14 @@ var getters = {
   * @param  {[type]} state [description]
   * @return {[type]}       [description]
   */
-  // getWorkById (state) {
-  //   return function(id) {
-  //       return state.works.find(work => work.id == id);
-  //       console.log(state);
-  //     }
-  // },
+  getWorkById: function getWorkById(state) {
+    return function (id) {
+      return state.works.find(function (work) {
+        return work.id == id;
+      });
+      console.log(state);
+    };
+  },
 
   /**
   * ALL CATEGORIES
@@ -2661,20 +2576,6 @@ var getters = {
   */
   getCategories: function getCategories(state) {
     return state.categories;
-  },
-
-  /**
-  * WORKS BY CATEGORIE ID
-  * @param  {[type]} state [description]
-  * @return {[type]}       [description]
-  */
-  getWorksByCategorieId: function getWorksByCategorieId(state) {
-    return function (id) {
-      console.log(state.work); //return state.work.filter(work => work.categories[0].id == id);
-      // return state.work.find(work => work.categories_id == id);
-
-      return state.work;
-    };
   }
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (getters);
@@ -2734,9 +2635,6 @@ var mutations = {
   },
   SET_CATEGORIES: function SET_CATEGORIES(state, data) {
     state.categories = data;
-  },
-  SET_WORK: function SET_WORK(state, data) {
-    state.work = data;
   }
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (mutations);
@@ -2757,7 +2655,6 @@ __webpack_require__.r(__webpack_exports__);
 // ./resources/js/store/state.js
 var state = {
   works: [],
-  work: [],
   categories: []
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (state);
@@ -39054,39 +38951,32 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "section",
-      {
-        staticClass: "dark-wrapper opaqued parallax",
-        attrs: {
-          "data-parallax": "scroll",
-          "data-image-src": "assets/img/bg/bg2.jpg",
-          "data-speed": "0.7"
-        }
-      },
-      [
-        _c("div", { staticClass: "section-inner pad-top-200" }, [
-          _c("div", { staticClass: "container" }, [
-            _c("div", { staticClass: "row" }, [
-              _c("div", { staticClass: "col-lg-12 mt30 wow text-center" }, [
-                _c("h2", { staticClass: "section-heading" }, [
-                  _vm._v("Mon portfolio")
-                ])
+  return _c(
+    "section",
+    {
+      staticClass: "dark-wrapper opaqued parallax",
+      attrs: {
+        "data-parallax": "scroll",
+        "data-image-src": "assets/img/bg/bg2.jpg",
+        "data-speed": "0.7"
+      }
+    },
+    [
+      _c("div", { staticClass: "section-inner pad-top-200" }, [
+        _c("div", { staticClass: "container" }, [
+          _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col-lg-12 mt30 wow text-center" }, [
+              _c("h2", { staticClass: "section-heading" }, [
+                _vm._v(_vm._s(_vm.work.title))
               ])
             ])
           ])
         ])
-      ]
-    )
-  }
-]
+      ])
+    ]
+  )
+}
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -39482,7 +39372,7 @@ var render = function() {
                     staticClass:
                       "portfolio-items nopadding-lr isotope list-unstyled"
                   },
-                  _vm._l(this.works, function(work) {
+                  _vm._l(_vm.works, function(work) {
                     return _c(
                       "li",
                       {

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Work extends Model
 {
     use HasFactory;
+    protected $table = 'works';
 
     /**
     * GETTER des comments du post.
@@ -24,10 +25,10 @@ class Work extends Model
     }
 
     /**
-    * GETTER des categories du work
+    * GETTER de la categorie à qui appartient ce work.
     */
-    public function categories() {
-      return $this->belongsToMany('App\Models\Categorie', 'works_has_categories');
+    public function categorie(){
+      return $this->belongsTo('App\Models\Categorie');
     }
 
     // /**

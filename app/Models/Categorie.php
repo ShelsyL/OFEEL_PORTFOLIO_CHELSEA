@@ -13,16 +13,9 @@ class Categorie extends Model
     /**
     * GETTER des works de la categorie.
     */
-    public function works() {
-      return $this->belongsToMany('App\Models\Work', 'works_has_categories');
+    public function work() {
+      return $this->hasMany('App\Models\Work', 'categorie');
     }
-
-    /**
-    * GETTER des works de la categorie.
-    */
-    // public function works() {
-    //   return $this->belongsToMany('App\Models\Work', 'works_has_categories', 'categorie_id', 'work_id');
-    // }
 
 
     /**

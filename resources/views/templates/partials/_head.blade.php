@@ -9,7 +9,7 @@
 <link rel="apple-touch-icon" sizes="72x72" href="{{ asset('assets/img/ico/apple-touch-icon-72x72.png') }}">
 <link rel="apple-touch-icon" href="{{ asset('assets/img/ico/apple-touch-icon-57x57.png') }}">
 
-<title>OFEEL</title>
+<title>OFEEL_CHELSEA</title>
 
 {{-- Chargement du fichier css qui se trouve dans les assets(dossier public) --}}
 {{-- <link rel="stylesheet" href="{{ asset('css/app.css') }}"> --}}

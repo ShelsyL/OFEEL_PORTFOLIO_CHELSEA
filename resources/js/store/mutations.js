@@ -8,11 +8,8 @@ let mutations = {
 
   SET_CATEGORIES (state, data) {
     state.categories = data;
-  },
-
-  SET_WORK (state, data) {
-    state.work = data;
   }
+
 
 };
 
