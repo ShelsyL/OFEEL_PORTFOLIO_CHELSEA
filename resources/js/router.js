@@ -5,6 +5,7 @@ import Router from 'vue-router'
 // Chargement des composants des différentes routes
 import WorksIndex from './components/works/Index'
 import WorksShow  from './components/works/Show'
+import CategoriesShow  from './components/categories/CategoriesMenu'
 
 // Création du routing
 Vue.use(Router)
@@ -13,7 +14,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'work.index',
+      name: 'works.index',
       component: WorksIndex
     },
     {

@@ -14,7 +14,7 @@
   <script>
   export default {
     mounted() {
-      // Images du header qui tournent
+      // IMAGES DU HEADER QUI TOURNENT
       $(document).ready(function() {
         'use strict';
         jQuery('#headerwrap').backstretch([
@@ -29,7 +29,7 @@
         });
       });
 
-      // Chargement des mots HeaderHome
+      // CHARGEMENT DES MOTS DANS LE HEADERHOME
       $(document).ready(function() {
         jQuery(".rotate").textrotator({
           animation: "dissolve",

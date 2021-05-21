@@ -35,6 +35,14 @@ let getters = {
   },
 
 
+  // WORK BY CAT
+getWorksByCategorieId(state){
+  return function (id) {
+    return state.works.filter(works => works.categorie_id == id);
+  }
+},
+
+
 };
 
 export default getters;

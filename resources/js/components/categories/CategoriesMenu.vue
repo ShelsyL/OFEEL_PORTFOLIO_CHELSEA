@@ -4,7 +4,7 @@
     <div class="row">
       <div class="col-md-6 mb100 wow">
         <h2 class="section-heading">Recent Works</h2>
-        <h3 class="section-subheading secondary-font">Liste des works de Chelsea</h3>
+        <h3 class="section-subheading secondary-font">Mes travaux</h3>
       </div>
 
       <!-- CATEGORIES DES WORKS -->
@@ -30,7 +30,7 @@
 
 <script>
 export default {
-  name : 'categories-work',
+  name : 'categories-menu',
   computed : {
     // Affichage des catégories
     categories() {

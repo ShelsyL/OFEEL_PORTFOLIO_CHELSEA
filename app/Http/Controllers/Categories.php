@@ -8,7 +8,7 @@ use App\Models\Categorie;
 class Categories extends Controller {
 
   public function index () {
-    return response()->json(Categorie::all()); // Retourne toutes les Categories (Résultat) sous forme d'une réponse Json.
+    return response()->json(Categorie::all()); 
   }
 
 }

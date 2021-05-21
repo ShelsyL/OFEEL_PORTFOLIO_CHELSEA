@@ -13,8 +13,8 @@ class Categorie extends Model
     /**
     * GETTER des works de la categorie.
     */
-    public function work() {
-      return $this->hasMany('App\Models\Work', 'categorie');
+    public function works() {
+      return $this->hasMany('App\Models\Work');
     }
 
 

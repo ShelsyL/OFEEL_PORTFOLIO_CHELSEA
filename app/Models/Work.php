@@ -11,6 +11,14 @@ class Work extends Model
     protected $table = 'works';
 
     /**
+    * GETTER de la categorie à qui appartient ce work.
+    */
+    public function categorie(){
+      return $this->belongsTo('App\Models\Categorie');
+    }
+
+
+    /**
     * GETTER des comments du post.
     */
     public function commentsOfWork() {
@@ -24,17 +32,4 @@ class Work extends Model
       return $this->belongsToMany('App\Models\Tag', 'works_has_tags');
     }
 
-    /**
-    * GETTER de la categorie à qui appartient ce work.
-    */
-    public function categorie(){
-      return $this->belongsTo('App\Models\Categorie');
-    }
-
-    // /**
-    // * GETTER des categories du work
-    // */
-    // public function categories() {
-    //   return $this->belongsToMany('App\Models\Categorie', 'works_has_categories', 'work_id', 'categorie_id');
-    // }
 }

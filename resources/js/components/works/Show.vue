@@ -29,14 +29,14 @@
                 <div class="hover-item gap">
                 <img :src="'assets/img/portfolio/portfolio9.jpg'" class="img-responsive " alt="title">
               </div> -->
+                </div>
+              </div>
             </div>
+
           </div>
         </div>
 
-      </div>
-    </div>
-
-    <comments-work></comments-work>
+          <comments-work></comments-work>
 
       </div>
     </section>
