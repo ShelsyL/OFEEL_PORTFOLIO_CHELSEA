@@ -27,7 +27,7 @@
                     <div class="vertical-center smoothie">
                       <h3 class="smoothie mb30"><a href="single-portfolio-fullscreen.html" title="view project"></a></h3>
                       <a :href="'assets/img/portfolio/' + work.image" target="_blank" title="View Gallery" class="btn btn-primary lb-link smoothie">Zoom</a>
-                      <router-link class="smoothie btn btn-primary" :to="{name: 'works.show', params: { id: work.id}}">En savoir +</router-link>
+                      <router-link class="smoothie btn btn-primary" :to="{name: 'works.show', params: { id: work.id}}">{{ work.title }} ...</router-link>
                     </div>
                   </div>
                 </div>
@@ -36,7 +36,7 @@
               <!-- BOUTON MORE WORKS -->
               <div class="col-md-12">
               <div class="buttons">
-                <button class="btn btn-gray" style="padding: 20px; border-radius: 10px; margin-top: 60px; margin-left: 50%;"  type="button" @click="moreWorks += 6">More</button>
+                <button class="btn btn-gray" style="padding: 20px; border-radius: 10px; margin-top: 60px; margin-left: 50%;"  type="button" @click="moreWorks += 3">More</button>
               </div>
               </div>
 
@@ -52,7 +52,7 @@
 export default {
   data(){
     return {
-      moreWorks: 9
+      moreWorks: 6
     }
   },
 

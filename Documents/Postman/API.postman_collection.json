@@ -1,0 +1,81 @@
+{
+	"info": {
+		"_postman_id": "07dfd2dc-2192-4748-9dfc-3a2f1d42fbd3",
+		"name": "API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Works",
+			"item": [
+				{
+					"name": "index",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/public/api/works",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"public",
+								"api",
+								"works"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Categories",
+			"item": [
+				{
+					"name": "index",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/public/api/categories",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"public",
+								"api",
+								"categories"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "WorkComments",
+			"item": [
+				{
+					"name": "index",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/public/api/workcomments",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"public",
+								"api",
+								"workcomments"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

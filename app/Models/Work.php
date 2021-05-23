@@ -19,10 +19,10 @@ class Work extends Model
 
 
     /**
-    * GETTER des comments du post.
+    * GETTER des comments du work.
     */
-    public function commentsOfWork() {
-      return $this->hasMany('App\Models\CommentOfWork');
+    public function comments() {
+      return $this->hasMany('App\Models\Workcomment');
     }
 
     /**

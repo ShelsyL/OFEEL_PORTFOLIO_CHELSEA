@@ -8,6 +8,14 @@ let mutations = {
 
   SET_CATEGORIES (state, data) {
     state.categories = data;
+  },
+
+  SET_WORKCOMMENTS (state, data) {
+    state.workcomments = data;
+  },
+
+  CREATE_WORKCOMMENT (state, data) {
+    state.workcomments.unshift(comment);
   }
 
 

@@ -2086,8 +2086,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'categories-menu',
   computed: {
@@ -2184,23 +2182,39 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'comments-work'
+  name: 'comments-work',
+  data: function data() {
+    return {
+      newWorkcomment: {
+        pseudo: '',
+        content: '',
+        work_id: ''
+      }
+    };
+  },
+  methods: {
+    // Envoi d'un nouveau comment
+    createWorkcomment: function createWorkcomment(comment) {
+      this.$store.dispatch('createWorkcomment', comment);
+      this.newWorkcomment = {
+        pseudo: '',
+        content: '',
+        work_id: null
+      };
+    }
+  },
+  computed: {
+    work: function work() {
+      var id = this.$route.params.id;
+      return this.$store.getters.getWorkById(id);
+    },
+    // Affichage des commentaires
+    workcomments: function workcomments() {
+      var id = this.$route.params.id;
+      return this.$store.getters.getCommentsByWorkId(id);
+    }
+  }
 });
 
 /***/ }),
@@ -2269,7 +2283,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
-      moreWorks: 9
+      moreWorks: 6
     };
   },
   computed: {
@@ -2352,6 +2366,7 @@ __webpack_require__.r(__webpack_exports__);
     return {};
   },
   computed: {
+    // Affichage du work
     work: function work() {
       var id = this.$route.params.id;
       return this.$store.getters.getWorkById(id);
@@ -2416,6 +2431,7 @@ var app = new Vue({
   created: function created() {
     this.$store.dispatch('setWorks');
     this.$store.dispatch('setCategories');
+    this.$store.dispatch('setWorkcomments');
   }
 });
 
@@ -2526,13 +2542,33 @@ var actions = {
     // TRANSACTION AJAX pour lancer le SETTER
     axios.get('api/works').then(function (reponsePHP) {
       return commit('SET_WORKS', reponsePHP.data);
-    }); //   axios.get('api/categories')
-    //       .then(reponsePHP => (commit ('SET_CATEGORIES', reponsePHP.data)));
+    });
   },
   setCategories: function setCategories(_ref2) {
     var commit = _ref2.commit;
     axios.get('api/categories').then(function (reponsePHP) {
       return commit('SET_CATEGORIES', reponsePHP.data);
+    });
+  },
+  setWorkcomments: function setWorkcomments(_ref3) {
+    var commit = _ref3.commit;
+    // Transaction AJAX
+    axios.get('api/workcomments').then(function (reponsePHP) {
+      return commit('SET_WORKCOMMENTS', reponsePHP.data);
+    });
+  },
+  createWorkcomment: function createWorkcomment(_ref4, comment) {
+    var commit = _ref4.commit;
+    // https://laravel.com/docs/8.x/controllers#basic-controllers
+    // Creation du commentaire
+    axios.post('api/workcomments', comment).then(function (reponsePHP) {
+      return commit('CREATE_WORKCOMMENT', reponsePHP.data);
+    })["catch"](function (err) {
+      console.log(err);
+    }); // Envois le commentaire dans la liste des commentaires
+
+    axios.get('api/workcomments').then(function (reponsePHP) {
+      return commit('SET_WORKCOMMENTS', reponsePHP.data);
     });
   }
 };
@@ -2589,6 +2625,19 @@ var getters = {
     return function (id) {
       return state.works.filter(function (works) {
         return works.categorie_id == id;
+      });
+    };
+  },
+
+  /**
+  * COMMENTS BY WORK ID
+  * @param  {[type]} state [description]
+  * @return {[type]}       [description]
+  */
+  getCommentsByWorkId: function getCommentsByWorkId(state) {
+    return function (id) {
+      return state.workcomments.filter(function (workcomments) {
+        return workcomments.work_id == id;
       });
     };
   }
@@ -2650,6 +2699,12 @@ var mutations = {
   },
   SET_CATEGORIES: function SET_CATEGORIES(state, data) {
     state.categories = data;
+  },
+  SET_WORKCOMMENTS: function SET_WORKCOMMENTS(state, data) {
+    state.workcomments = data;
+  },
+  CREATE_WORKCOMMENT: function CREATE_WORKCOMMENT(state, data) {
+    state.workcomments.unshift(comment);
   }
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (mutations);
@@ -2670,7 +2725,8 @@ __webpack_require__.r(__webpack_exports__);
 // ./resources/js/store/state.js
 var state = {
   works: [],
-  categories: []
+  categories: [],
+  workcomments: []
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (state);
 
@@ -39022,41 +39078,37 @@ var render = function() {
         _c(
           "ul",
           { staticClass: "portfolio-filter mb30 list-inline wow" },
-          [
-            _vm._m(1),
-            _vm._v(" "),
-            _vm._l(_vm.categories, function(categorie) {
-              return _c(
-                "li",
-                { key: categorie.id },
-                [
-                  _c(
-                    "router-link",
-                    {
-                      attrs: {
-                        to: {
-                          name: "categories.show",
-                          params: { id: categorie.id }
-                        }
+          _vm._l(_vm.categories, function(categorie) {
+            return _c(
+              "li",
+              { key: categorie.id },
+              [
+                _c(
+                  "router-link",
+                  {
+                    attrs: {
+                      to: {
+                        name: "categories.show",
+                        params: { id: categorie.id }
                       }
-                    },
-                    [
-                      _c(
-                        "a",
-                        {
-                          staticClass: "btn btn-primary",
-                          attrs: { href: "#", "data-filter": "*" }
-                        },
-                        [_vm._v(_vm._s(categorie.name))]
-                      )
-                    ]
-                  )
-                ],
-                1
-              )
-            })
-          ],
-          2
+                    }
+                  },
+                  [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "btn btn-primary",
+                        attrs: { href: "#", "data-filter": "*" }
+                      },
+                      [_vm._v(_vm._s(categorie.name))]
+                    )
+                  ]
+                )
+              ],
+              1
+            )
+          }),
+          0
         )
       ])
     ])
@@ -39073,21 +39125,6 @@ var staticRenderFns = [
       _c("h3", { staticClass: "section-subheading secondary-font" }, [
         _vm._v("Mes travaux")
       ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("li", [
-      _c(
-        "a",
-        {
-          staticClass: "btn btn-primary",
-          attrs: { href: "#", "data-filter": "*" }
-        },
-        [_vm._v("All")]
-      )
     ])
   }
 ]
@@ -39113,226 +39150,244 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("section", [
+    _c("div", { staticClass: "section-inner" }, [
+      _c("div", { staticClass: "container pad-sides-120" }, [
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-sm-3" }),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "col-sm-9 blog-item mb60 wow",
+              attrs: { id: "post-content" }
+            },
+            [
+              _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "col-sm-12 single-post-content" }, [
+                  _c(
+                    "div",
+                    { staticClass: "gap wow", attrs: { id: "comments-list" } },
+                    [
+                      _vm._m(0),
+                      _vm._v(" "),
+                      _vm._l(_vm.workcomments, function(workcomment) {
+                        return _c(
+                          "div",
+                          { key: workcomment.id, staticClass: "media" },
+                          [
+                            _vm._m(1, true),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "media-body" }, [
+                              _c("div", { staticClass: "well" }, [
+                                _c("div", { staticClass: "media-heading" }, [
+                                  _c("span", { staticClass: "heading-font" }, [
+                                    _vm._v(_vm._s(workcomment.pseudo))
+                                  ]),
+                                  _vm._v("  "),
+                                  _c("small", [
+                                    _vm._v(
+                                      _vm._s(workcomment.created_at) +
+                                        "30th Jan, 2015"
+                                    )
+                                  ])
+                                ]),
+                                _vm._v(" "),
+                                _c("p", [_vm._v(_vm._s(workcomment.content))]),
+                                _vm._v(" "),
+                                _c(
+                                  "a",
+                                  {
+                                    staticClass: "btn btn-primary pull-right",
+                                    attrs: { href: "#" }
+                                  },
+                                  [_vm._v("Reply")]
+                                )
+                              ])
+                            ])
+                          ]
+                        )
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticClass: "row wow",
+                          attrs: { id: "comments-form" }
+                        },
+                        [
+                          _c("div", { staticClass: "col-md-12" }, [
+                            _vm._m(2),
+                            _vm._v(" "),
+                            _c(
+                              "form",
+                              {
+                                staticClass: "comment-form",
+                                attrs: { method: "post", id: "commentform" },
+                                on: {
+                                  submit: function($event) {
+                                    $event.preventDefault()
+                                    return _vm.createWorkcomment(
+                                      _vm.newWorkcomment
+                                    )
+                                  }
+                                }
+                              },
+                              [
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: (_vm.newWorkcomment.work_id =
+                                        _vm.work.id),
+                                      expression:
+                                        "newWorkcomment.work_id = work.id "
+                                    }
+                                  ],
+                                  attrs: {
+                                    id: "work_id",
+                                    type: "hidden",
+                                    name: "work_id"
+                                  },
+                                  domProps: {
+                                    value: (_vm.newWorkcomment.work_id =
+                                      _vm.work.id)
+                                  },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        (_vm.newWorkcomment.work_id = _vm.work),
+                                        "id",
+                                        $event.target.value
+                                      )
+                                    }
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.newWorkcomment.pseudo,
+                                      expression: "newWorkcomment.pseudo"
+                                    }
+                                  ],
+                                  staticClass: "form-control col-md-4",
+                                  attrs: {
+                                    type: "text",
+                                    id: "pseudo",
+                                    name: "pseudo",
+                                    placeholder: "Votre Nom | Pseudo *"
+                                  },
+                                  domProps: {
+                                    value: _vm.newWorkcomment.pseudo
+                                  },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        _vm.newWorkcomment,
+                                        "pseudo",
+                                        $event.target.value
+                                      )
+                                    }
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c("textarea", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.newWorkcomment.content,
+                                      expression: "newWorkcomment.content"
+                                    }
+                                  ],
+                                  staticClass: "form-control",
+                                  attrs: {
+                                    id: "content",
+                                    name: "content",
+                                    placeholder: "Votre message *"
+                                  },
+                                  domProps: {
+                                    value: _vm.newWorkcomment.content
+                                  },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        _vm.newWorkcomment,
+                                        "content",
+                                        $event.target.value
+                                      )
+                                    }
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _vm._m(3)
+                              ]
+                            )
+                          ])
+                        ]
+                      )
+                    ],
+                    2
+                  )
+                ])
+              ])
+            ]
+          )
+        ])
+      ])
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("section", [
-      _c("div", { staticClass: "section-inner" }, [
-        _c("div", { staticClass: "container pad-sides-120" }, [
-          _c("div", { staticClass: "row" }, [
-            _c("div", { staticClass: "col-sm-3" }),
-            _vm._v(" "),
-            _c(
-              "div",
-              {
-                staticClass: "col-sm-9 blog-item mb60 wow",
-                attrs: { id: "post-content" }
-              },
-              [
-                _c("div", { staticClass: "row" }, [
-                  _c("div", { staticClass: "col-sm-12 single-post-content" }, [
-                    _c(
-                      "div",
-                      {
-                        staticClass: "gap wow",
-                        attrs: { id: "comments-list" }
-                      },
-                      [
-                        _c(
-                          "div",
-                          { staticClass: "mt60 mb50 single-section-title" },
-                          [_c("h3", [_vm._v("3 Comments")])]
-                        ),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "media" }, [
-                          _c("div", { staticClass: "pull-left" }, [
-                            _c("img", {
-                              staticClass: "avatar comment-avatar",
-                              attrs: { src: "assets/img/users/1.jpg", alt: "" }
-                            })
-                          ]),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "media-body" }, [
-                            _c("div", { staticClass: "well" }, [
-                              _c("div", { staticClass: "media-heading" }, [
-                                _c("span", { staticClass: "heading-font" }, [
-                                  _vm._v("Dave Evans")
-                                ]),
-                                _vm._v("  "),
-                                _c("small", { staticClass: "secondary-font" }, [
-                                  _vm._v("30th Jan, 2015")
-                                ])
-                              ]),
-                              _vm._v(" "),
-                              _c("p", [
-                                _vm._v(
-                                  "Was are delightful solicitude discovered collecting man day. Resolving neglected sir tolerably but existence conveying for. Day his put off unaffected literature partiality inhabiting."
-                                )
-                              ]),
-                              _vm._v(" "),
-                              _c(
-                                "a",
-                                {
-                                  staticClass: "btn btn-primary pull-right",
-                                  attrs: { href: "#" }
-                                },
-                                [_vm._v("Reply")]
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "media" }, [
-                              _c("div", { staticClass: "pull-left" }, [
-                                _c("img", {
-                                  staticClass: "avatar comment-avatar",
-                                  attrs: {
-                                    src: "assets/img/users/2.jpg",
-                                    alt: ""
-                                  }
-                                })
-                              ]),
-                              _vm._v(" "),
-                              _c("div", { staticClass: "media-body" }, [
-                                _c("div", { staticClass: "well" }, [
-                                  _c("div", { staticClass: "media-heading" }, [
-                                    _c(
-                                      "span",
-                                      { staticClass: "heading-font" },
-                                      [_vm._v("Dave Evans")]
-                                    ),
-                                    _vm._v("  "),
-                                    _c("small", [_vm._v("30th Jan, 2015")])
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("p", [
-                                    _vm._v(
-                                      "Wicket longer admire do barton vanity itself do in it. Preferred to sportsmen it engrossed listening. Park gate sell they west hard for the. Abode stuff noisy manor blush yet the far. Up colonel so between removed so do."
-                                    )
-                                  ]),
-                                  _vm._v(" "),
-                                  _c(
-                                    "a",
-                                    {
-                                      staticClass: "btn btn-primary pull-right",
-                                      attrs: { href: "#" }
-                                    },
-                                    [_vm._v("Reply")]
-                                  )
-                                ])
-                              ])
-                            ])
-                          ])
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "media" }, [
-                          _c("div", { staticClass: "pull-left" }, [
-                            _c("img", {
-                              staticClass: "avatar comment-avatar",
-                              attrs: { src: "assets/img/users/3.jpg", alt: "" }
-                            })
-                          ]),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "media-body" }, [
-                            _c("div", { staticClass: "well" }, [
-                              _c("div", { staticClass: "media-heading" }, [
-                                _c("span", { staticClass: "heading-font" }, [
-                                  _vm._v("Dave Evans")
-                                ]),
-                                _vm._v("  "),
-                                _c("small", [_vm._v("30th Jan, 2015")])
-                              ]),
-                              _vm._v(" "),
-                              _c("p", [
-                                _vm._v(
-                                  "Quitting informed concerns can men now. Projection to or up conviction uncommonly delightful continuing. In appetite ecstatic opinions hastened by handsome admitted."
-                                )
-                              ]),
-                              _vm._v(" "),
-                              _c(
-                                "a",
-                                {
-                                  staticClass: "btn btn-primary pull-right",
-                                  attrs: { href: "#" }
-                                },
-                                [_vm._v("Reply")]
-                              )
-                            ])
-                          ])
-                        ]),
-                        _vm._v(" "),
-                        _c(
-                          "div",
-                          {
-                            staticClass: "row wow",
-                            attrs: { id: "comments-form" }
-                          },
-                          [
-                            _c("div", { staticClass: "col-md-12" }, [
-                              _c(
-                                "div",
-                                {
-                                  staticClass: "mt60 mb50 single-section-title"
-                                },
-                                [_c("h3", [_vm._v("Commentaires")])]
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "form",
-                                {
-                                  staticClass: "comment-form",
-                                  attrs: { method: "post", id: "commentform" }
-                                },
-                                [
-                                  _c("input", {
-                                    staticClass: "form-control col-md-4",
-                                    attrs: {
-                                      type: "text",
-                                      name: "name2",
-                                      placeholder: "Votre Nom | Pseudo *",
-                                      id: "name2",
-                                      required: "",
-                                      "data-validation-required-message":
-                                        "Please enter your name."
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _c("textarea", {
-                                    staticClass: "form-control",
-                                    attrs: {
-                                      name: "comments2",
-                                      id: "comments2",
-                                      placeholder: "Votre message *",
-                                      required: "",
-                                      "data-validation-required-message":
-                                        "Please enter a message."
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _c(
-                                    "a",
-                                    {
-                                      staticClass: "btn btn-primary pull-right",
-                                      attrs: { href: "#" }
-                                    },
-                                    [_vm._v("Envoyer")]
-                                  )
-                                ]
-                              )
-                            ])
-                          ]
-                        )
-                      ]
-                    )
-                  ])
-                ])
-              ]
-            )
-          ])
-        ])
-      ])
+    return _c("div", { staticClass: "mt60 mb50 single-section-title" }, [
+      _c("h3", [_vm._v("Commentaires")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "pull-left" }, [
+      _c("img", {
+        staticClass: "avatar comment-avatar",
+        attrs: { src: "assets/img/users/ours.jpg", alt: "" }
+      })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "mt60 mb50 single-section-title" }, [
+      _c("h3", [_vm._v("Laisser un commentaire")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", [
+      _c("input", {
+        staticClass: "btn btn-primary pull-right",
+        attrs: { type: "submit", name: "envoi", value: "Envoyer" }
+      })
     ])
   }
 ]
@@ -39445,7 +39500,7 @@ var render = function() {
                                           }
                                         }
                                       },
-                                      [_vm._v("En savoir +")]
+                                      [_vm._v(_vm._s(work.title) + " ...")]
                                     )
                                   ],
                                   1
@@ -39472,7 +39527,7 @@ var render = function() {
                             attrs: { type: "button" },
                             on: {
                               click: function($event) {
-                                _vm.moreWorks += 6
+                                _vm.moreWorks += 3
                               }
                             }
                           },

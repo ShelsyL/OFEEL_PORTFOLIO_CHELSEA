@@ -19,9 +19,9 @@ let getters = {
   */
   getWorkById (state) {
     return function (id) {
-        return state.works.find(work => work.id == id);
-        console.log(state);
-      }
+      return state.works.find(work => work.id == id);
+      console.log(state);
+    }
   },
 
 
@@ -35,12 +35,24 @@ let getters = {
   },
 
 
-  // WORK BY CAT
-getWorksByCategorieId(state){
-  return function (id) {
-    return state.works.filter(works => works.categorie_id == id);
+// WORK BY CAT
+  getWorksByCategorieId(state){
+    return function (id) {
+      return state.works.filter(works => works.categorie_id == id);
+    }
+  },
+
+
+/**
+* COMMENTS BY WORK ID
+* @param  {[type]} state [description]
+* @return {[type]}       [description]
+*/
+  getCommentsByWorkId (state) {
+    return function (id) {
+      return state.workcomments.filter(workcomments => workcomments.work_id == id);
+    }
   }
-},
 
 
 };

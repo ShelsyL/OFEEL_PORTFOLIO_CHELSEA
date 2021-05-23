@@ -54,10 +54,12 @@ export default {
   },
 
   computed: {
+    // Affichage du work
     work () {
       let id = this.$route.params.id;
       return this.$store.getters.getWorkById(id);
-    }
+    },
+
   }
 
 }

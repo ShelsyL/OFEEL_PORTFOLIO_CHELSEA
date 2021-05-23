@@ -29,3 +29,9 @@ use App\Http\Controllers\Categories;
 Route::resource('categories', Categories::class, [
   'except' => ['show', 'create', 'edit']
 ]);
+
+
+use App\Http\Controllers\Workcomments;
+Route::resource('workcomments', Workcomments::class, [
+  'except' => ['show', 'create', 'edit']
+]);

@@ -12,4 +12,8 @@ class Works extends Controller {
     return response()->json(Work::with('categorie')->get());
   }
 
+  // public function show($id) {
+  //   return response()->json(Work::findOrFail($id));
+  // }
+
 }
