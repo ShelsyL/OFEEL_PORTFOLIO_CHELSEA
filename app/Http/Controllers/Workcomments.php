@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use App\Models\Workcomment;
+use App\Models\Work;
+use App\Mail\WorkCommented;
 
 class Workcomments extends Controller {
 
@@ -23,6 +26,8 @@ class Workcomments extends Controller {
      */
   public function store(Request $request){
       $workcomment = Workcomment::create($request->all());
+      $work = Work::findOrFail($request->work_id);
+      Mail::to('ofeel.chelsea@gmail.com')->send(new WorkCommented($work, $workcomment));
       return response()->json($workcomment);
   }
     }
